@@ -2,9 +2,19 @@
   "name": "home-nas",
   "version": "1.0.0",
   "main": "index.js",
-  "author": "stephenyu <stephen@canva.com>",
+  "author": "stephenyu <s.yu@less.com>",
   "license": "MIT",
   "dependencies": {
     "express": "^4.17.1"
+  },
+  "scripts": {
+      "prestart": "tsc",
+      "start": "node dist/main.js"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.3",
+    "@types/node": "^13.9.0",
+    "tslint": "^6.0.0",
+    "typescript": "^3.8.3"
   }
 }
