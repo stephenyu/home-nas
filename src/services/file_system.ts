@@ -11,20 +11,41 @@ export interface DiskStatus {
 
 export interface FileSystem {
     diskStorage: () => Promise<DiskStatus[]>;
+    uptime: () => Promise<string>;
 }
 
 export class LinuxFileSystem implements FileSystem {
   diskStorage = async () => {
-    const { stdout } = await exec('df -B1 | | grep "^/dev/"');
-    console.log(stdout);
+    // const { stdout } = await exec('df -B1 | grep "^/dev/"');
 
-    return Promise.resolve(
-      [
-        {label: 'Disk 1', byteTotal: 1000, byteUsage: 500},
-        {label: 'Disk 2', byteTotal: 1000, byteUsage: 500}
-      ]
-    );
+    const stdout = `/dev/root        15383740416 2049515520   12676681728  14% /
+/dev/md0         30117130240 5192548352   24877072384  18% /mnt/raid
+/dev/mmcblk0p1     264289280   54747648     209541632  21% /boot
+/dev/sdc1      1967924641792   79720448 1965827747840   1% /mnt/external`;
+
+    const lineByline = stdout.split("\n");
+
+    // "/dev/root        15383740416 2049515520   12676681728  14% /"
+    const regex = /(\S+)\s+(\d+)\s+(\d+)\s+(\d+)\s+(\d+\%)\s+(\S+)$/;
+
+    const diskStatus: DiskStatus[] = lineByline.map(line => {
+      const match = regex.exec(line);
+
+      if (match) {
+        // eslint-disable-next-line
+        const [_, label, x, byteUsage, byteTotal] = match;
+        return { label, byteUsage: parseInt(byteUsage), byteTotal: parseInt(byteTotal) }
+      } else
+        throw new Error("not Implemented")
+    });
+
+    return diskStatus;
   }
+
+    uptime = async () => {
+      const { stdout } = await exec('uptime');
+      return stdout;
+    }
 }
 
 export class FakeFileSystem implements FileSystem {
@@ -35,6 +56,10 @@ export class FakeFileSystem implements FileSystem {
           {label: 'Disk 2', byteTotal: 1000, byteUsage: 500}
         ]
       );
+    }
+
+    uptime = async () => {
+      return Promise.resolve("18:31  up 1 day, 10 mins, 2 users, load averages: 1.73 1.47 1.45");
     }
 }
 
