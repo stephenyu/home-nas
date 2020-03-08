@@ -25,23 +25,18 @@ const exec = util_1.default.promisify(child_process.exec);
 class LinuxFileSystem {
     constructor() {
         this.diskStorage = () => __awaiter(this, void 0, void 0, function* () {
-            // const { stdout } = await exec('df -B1 | grep "^/dev/"');
-            const stdout = `/dev/root        15383740416 2049515520   12676681728  14% /
-/dev/md0         30117130240 5192548352   24877072384  18% /mnt/raid
-/dev/mmcblk0p1     264289280   54747648     209541632  21% /boot
-/dev/sdc1      1967924641792   79720448 1965827747840   1% /mnt/external`;
+            const { stdout } = yield exec('df -B1 | grep "^/dev/"');
             const lineByline = stdout.split("\n");
             // "/dev/root        15383740416 2049515520   12676681728  14% /"
-            const regex = /(\S+)\s+(\d+)\s+(\d+)\s+(\d+)\s+(\d+\%)\s+(\S+)$/;
-            const diskStatus = lineByline.map(line => {
+            const regex = /(\S+)\s+(\d+)\s+(\d+)\s+(\d+)\s+(\d+%)\s+(\S+)$/;
+            const diskStatus = [];
+            lineByline.forEach(line => {
                 const match = regex.exec(line);
                 if (match) {
                     // eslint-disable-next-line
                     const [_, label, x, byteUsage, byteTotal] = match;
-                    return { label, byteUsage: parseInt(byteUsage), byteTotal: parseInt(byteTotal) };
+                    diskStatus.push({ label, byteUsage: parseInt(byteUsage), byteTotal: parseInt(byteTotal) });
                 }
-                else
-                    throw new Error("not Implemented");
             });
             return diskStatus;
         });
