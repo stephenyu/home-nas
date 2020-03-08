@@ -31,13 +31,20 @@ const DiskStatus = ({ diskStatus }) => {
     const diskElements = diskStatus.map((item, index) => React.createElement("div", { key: index }, `${item.label} - ${getHumanReadable(item.byteUsage)} of ${getHumanReadable(item.byteTotal)}`));
     return React.createElement("div", null, diskElements);
 };
-const Page = ({ diskStatus, uptime }) => {
+const Page = ({ diskStatus, uptime, raidStatus }) => {
     return React.createElement("div", null,
         React.createElement(DiskStatus, { diskStatus: diskStatus }),
-        React.createElement("pre", null, uptime));
+        React.createElement("pre", null, uptime),
+        React.createElement("textarea", { cols: 50, rows: 50, value: raidStatus, readOnly: true }));
 };
 exports.HomePage = (fileSystem) => __awaiter(void 0, void 0, void 0, function* () {
     const diskStatus = yield fileSystem.diskStorage();
     const uptime = yield fileSystem.uptime();
-    return React.createElement(Page, { diskStatus: diskStatus, uptime: uptime });
+    const raidStatus = yield fileSystem.raidStatus('');
+    return React.createElement("html", { lang: "en" },
+        React.createElement("head", null,
+            React.createElement("meta", { httpEquiv: "x-ua-compatible", content: "ie=edge" }),
+            React.createElement("meta", { name: "viewport", content: "width=device-width, initial-scale=1" })),
+        React.createElement("body", null,
+            React.createElement(Page, { diskStatus: diskStatus, uptime: uptime, raidStatus: raidStatus })));
 });

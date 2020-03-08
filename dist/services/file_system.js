@@ -49,6 +49,10 @@ class LinuxFileSystem {
             const { stdout } = yield exec('uptime');
             return stdout;
         });
+        this.raidStatus = () => __awaiter(this, void 0, void 0, function* () {
+            const { stdout } = yield exec('sudo mdadm --detail /dev/md0');
+            return stdout;
+        });
     }
 }
 exports.LinuxFileSystem = LinuxFileSystem;
@@ -62,6 +66,34 @@ class FakeFileSystem {
         });
         this.uptime = () => __awaiter(this, void 0, void 0, function* () {
             return Promise.resolve("18:31  up 1 day, 10 mins, 2 users, load averages: 1.73 1.47 1.45");
+        });
+        this.raidStatus = () => __awaiter(this, void 0, void 0, function* () {
+            return Promise.resolve(`/dev/md0:
+           Version : 1.2
+     Creation Time : Sat Mar  7 00:48:01 2020
+        Raid Level : raid1
+        Array Size : 30013376 (28.62 GiB 30.73 GB)
+     Used Dev Size : 30013376 (28.62 GiB 30.73 GB)
+      Raid Devices : 2
+     Total Devices : 2
+       Persistence : Superblock is persistent
+
+       Update Time : Sun Mar  8 20:22:04 2020
+             State : clean
+    Active Devices : 2
+   Working Devices : 2
+    Failed Devices : 0
+     Spare Devices : 0
+
+Consistency Policy : resync
+
+              Name : raspberrypi:0
+              UUID : 641c6a23:900819e1:2ea9ec2d:7112fb1f
+            Events : 459
+
+    Number   Major   Minor   RaidDevice State
+       0       8       16        0      active sync   /dev/sdb
+       1       8        1        1      active sync   /dev/sda1`);
         });
     }
 }

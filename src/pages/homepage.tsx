@@ -5,6 +5,7 @@ import { DiskStatus, LinuxFileSystem, FileSystem } from 'services/file_system';
 interface PageProps {
     diskStatus: DiskStatus[];
     uptime: string;
+    raidStatus: string;
 }
 
 const memoryUnits = ['B', 'MB', 'GB', 'TB'];
@@ -27,17 +28,28 @@ const DiskStatus = ({diskStatus} : {diskStatus: DiskStatus[]}) => {
   return <div>{diskElements}</div>
 }
 
-const Page = ({ diskStatus, uptime }: PageProps) => {
+const Page = ({ diskStatus, uptime, raidStatus }: PageProps) => {
 
   return <div>
     <DiskStatus diskStatus={diskStatus}/>
     <pre>{uptime}</pre>
+    <textarea cols={50} rows={50} value={raidStatus} readOnly={true}/>
   </div>;
 };
 
 export const HomePage = async (fileSystem: FileSystem): Promise<JSX.Element> => {
   const diskStatus = await fileSystem.diskStorage();
   const uptime = await fileSystem.uptime();
+  const raidStatus = await fileSystem.raidStatus('');
 
-  return <Page diskStatus={diskStatus} uptime={uptime}/>;
+  return <html lang="en">
+    <head>
+      <meta httpEquiv="x-ua-compatible" content="ie=edge" />
+      <meta name="viewport" content="width=device-width, initial-scale=1" />
+    </head>
+
+    <body>
+      <Page diskStatus={diskStatus} uptime={uptime} raidStatus={raidStatus}/>
+    </body>
+  </html>
 };
