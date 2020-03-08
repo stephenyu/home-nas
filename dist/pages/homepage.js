@@ -17,7 +17,6 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const React = __importStar(require("react"));
-const file_system_1 = require("services/file_system");
 const memoryUnits = ['B', 'MB', 'GB', 'TB'];
 const getHumanReadable = (value) => {
     let humanReadableValue = value;
@@ -37,8 +36,7 @@ const Page = ({ diskStatus, uptime }) => {
         React.createElement(DiskStatus, { diskStatus: diskStatus }),
         React.createElement("pre", null, uptime));
 };
-exports.HomePage = () => __awaiter(void 0, void 0, void 0, function* () {
-    const fileSystem = new file_system_1.LinuxFileSystem();
+exports.HomePage = (fileSystem) => __awaiter(void 0, void 0, void 0, function* () {
     const diskStatus = yield fileSystem.diskStorage();
     const uptime = yield fileSystem.uptime();
     return React.createElement(Page, { diskStatus: diskStatus, uptime: uptime });

@@ -52,8 +52,8 @@ export class FakeFileSystem implements FileSystem {
     diskStorage = async () => {
       return Promise.resolve(
         [
-          {label: 'Disk 1', byteTotal: 1000, byteUsage: 500},
-          {label: 'Disk 2', byteTotal: 1000, byteUsage: 500}
+          {label: 'Disk 1', byteTotal: 30000000, byteUsage: 50000},
+          {label: 'Disk 2', byteTotal: 3000000, byteUsage: 50000}
         ]
       );
     }

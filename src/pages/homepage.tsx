@@ -1,6 +1,6 @@
 import * as React from "react";
 
-import { DiskStatus, LinuxFileSystem } from 'services/file_system';
+import { DiskStatus, LinuxFileSystem, FileSystem } from 'services/file_system';
 
 interface PageProps {
     diskStatus: DiskStatus[];
@@ -35,8 +35,7 @@ const Page = ({ diskStatus, uptime }: PageProps) => {
   </div>;
 };
 
-export const HomePage = async (): Promise<JSX.Element> => {
-  const fileSystem = new LinuxFileSystem();
+export const HomePage = async (fileSystem: FileSystem): Promise<JSX.Element> => {
   const diskStatus = await fileSystem.diskStorage();
   const uptime = await fileSystem.uptime();
 

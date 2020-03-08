@@ -1,12 +1,20 @@
 import express from "express";
 import * as ReactDOMServer from "react-dom/server";
-import { HomePage } from "./pages/homepage";
+
+import { HomePage } from "pages/homepage";
+import { LinuxFileSystem, FakeFileSystem } from 'services/file_system';
 
 const app = express();
 const port = 8080; // default port to listen
+const flavor = process.env.FLAVOR;
 
 app.get("/", async (req, res) => {
-  const Page = await HomePage();
+
+  const fileSystem = (flavor === "production")
+    ? new LinuxFileSystem()
+    : new FakeFileSystem();
+
+  const Page = await HomePage(fileSystem);
 
   res.send(ReactDOMServer.renderToStaticMarkup(Page));
 });
