@@ -40,7 +40,7 @@ export class LinuxFileSystem implements FileSystem {
   }
 
     uptime = async () => {
-      const { stdout } = await exec('uptime');
+      const { stdout } = await exec('uptime -p');
       return stdout;
     }
 
@@ -61,7 +61,7 @@ export class FakeFileSystem implements FileSystem {
     }
 
     uptime = async () => {
-      return Promise.resolve("18:31  up 1 day, 10 mins, 2 users, load averages: 1.73 1.47 1.45");
+      return Promise.resolve("up 1 day, 10 mins");
     }
 
     raidStatus = async() => {

@@ -29,7 +29,7 @@ const getHumanReadable = (value) => {
     return `${humanReadableValue.toPrecision(4)}${memoryUnits[index]}`;
 };
 const DiskStatus = ({ diskStatus }) => {
-    return React.createElement("ol", null, diskStatus.map((item, index) => {
+    return React.createElement("ol", { className: "diskList" }, diskStatus.map((item, index) => {
         const content = `${getHumanReadable(item.byteUsage)} of ${getHumanReadable(item.byteTotal)}`;
         return React.createElement("li", { key: index },
             React.createElement("span", null,
@@ -38,12 +38,6 @@ const DiskStatus = ({ diskStatus }) => {
             " ",
             React.createElement(percentage_bar_1.PercentageBar, { used: item.byteUsage, total: item.byteTotal, content: content }));
     }));
-};
-const Page = ({ diskStatus, uptime, raidStatus }) => {
-    return React.createElement("div", null,
-        React.createElement(DiskStatus, { diskStatus: diskStatus }),
-        React.createElement("pre", null, uptime),
-        React.createElement("textarea", { cols: 50, rows: 50, value: raidStatus, readOnly: true }));
 };
 exports.HomePage = (fileSystem) => __awaiter(void 0, void 0, void 0, function* () {
     const diskStatus = yield fileSystem.diskStorage();
@@ -55,5 +49,9 @@ exports.HomePage = (fileSystem) => __awaiter(void 0, void 0, void 0, function* (
             React.createElement("meta", { name: "viewport", content: "width=device-width, initial-scale=1" }),
             React.createElement("link", { href: "/main.css", rel: "stylesheet" })),
         React.createElement("body", null,
-            React.createElement(Page, { diskStatus: diskStatus, uptime: uptime, raidStatus: raidStatus })));
+            React.createElement("div", null,
+                diskStatus && React.createElement(DiskStatus, { diskStatus: diskStatus }),
+                uptime && React.createElement("pre", null, uptime),
+                raidStatus && React.createElement("textarea", { cols: 50, rows: 50, value: raidStatus, readOnly: true })),
+            ";"));
 });

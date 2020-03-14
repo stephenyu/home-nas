@@ -41,7 +41,7 @@ class LinuxFileSystem {
             return diskStatus;
         });
         this.uptime = () => __awaiter(this, void 0, void 0, function* () {
-            const { stdout } = yield exec('uptime');
+            const { stdout } = yield exec('uptime -p');
             return stdout;
         });
         this.raidStatus = () => __awaiter(this, void 0, void 0, function* () {
@@ -60,7 +60,7 @@ class FakeFileSystem {
             ]);
         });
         this.uptime = () => __awaiter(this, void 0, void 0, function* () {
-            return Promise.resolve("18:31  up 1 day, 10 mins, 2 users, load averages: 1.73 1.47 1.45");
+            return Promise.resolve("up 1 day, 10 mins");
         });
         this.raidStatus = () => __awaiter(this, void 0, void 0, function* () {
             return Promise.resolve(`/dev/md0:

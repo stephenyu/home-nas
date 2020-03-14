@@ -25,22 +25,13 @@ const getHumanReadable = (value: number): string => {
 
 
 const DiskStatus = ({diskStatus} : {diskStatus: DiskStatus[]}) => {
-  return <ol>
+  return <ol className="diskList">
     {diskStatus.map((item, index) => {
       const content = `${getHumanReadable(item.byteUsage)} of ${getHumanReadable(item.byteTotal)}`;
       return <li key={index}><span>{item.label} :</span> <PercentageBar used={item.byteUsage} total={item.byteTotal} content={content}/></li>
     })}
   </ol>
 }
-
-const Page = ({ diskStatus, uptime, raidStatus }: PageProps) => {
-
-  return <div>
-    <DiskStatus diskStatus={diskStatus}/>
-    <pre>{uptime}</pre>
-    <textarea cols={50} rows={50} value={raidStatus} readOnly={true}/>
-  </div>;
-};
 
 export const HomePage = async (fileSystem: FileSystem): Promise<JSX.Element> => {
   const diskStatus = await fileSystem.diskStorage();
@@ -55,7 +46,11 @@ export const HomePage = async (fileSystem: FileSystem): Promise<JSX.Element> => 
     </head>
 
     <body>
-      <Page diskStatus={diskStatus} uptime={uptime} raidStatus={raidStatus}/>
+      <div>
+        {diskStatus &&  <DiskStatus diskStatus={diskStatus}/>}
+        {uptime && <pre>{uptime}</pre>}
+        {raidStatus && <textarea cols={50} rows={50} value={raidStatus} readOnly={true}/>}
+      </div>;
     </body>
   </html>
 };
