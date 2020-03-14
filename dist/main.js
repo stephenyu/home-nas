@@ -8,9 +8,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 var __importStar = (this && this.__importStar) || function (mod) {
     if (mod && mod.__esModule) return mod;
     var result = {};
@@ -18,7 +15,11 @@ var __importStar = (this && this.__importStar) || function (mod) {
     result["default"] = mod;
     return result;
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
+const path = __importStar(require("path"));
 const express_1 = __importDefault(require("express"));
 const ReactDOMServer = __importStar(require("react-dom/server"));
 const homepage_1 = require("pages/homepage");
@@ -26,6 +27,7 @@ const file_system_1 = require("services/file_system");
 const app = express_1.default();
 const port = 8080; // default port to listen
 const flavor = process.env.FLAVOR;
+app.use(express_1.default.static(path.join(__dirname, 'public')));
 app.get("/", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const fileSystem = (flavor === "production")
         ? new file_system_1.LinuxFileSystem()

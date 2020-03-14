@@ -1,3 +1,4 @@
+import * as path from 'path';
 import express from "express";
 import * as ReactDOMServer from "react-dom/server";
 
@@ -8,8 +9,9 @@ const app = express();
 const port = 8080; // default port to listen
 const flavor = process.env.FLAVOR;
 
-app.get("/", async (req, res) => {
+app.use(express.static(path.join(__dirname, 'public')));
 
+app.get("/", async (req, res) => {
   const fileSystem = (flavor === "production")
     ? new LinuxFileSystem()
     : new FakeFileSystem();

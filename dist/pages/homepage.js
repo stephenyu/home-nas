@@ -17,6 +17,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const React = __importStar(require("react"));
+const percentage_bar_1 = require("./percentage_bar");
 const memoryUnits = ['B', 'MB', 'GB', 'TB'];
 const getHumanReadable = (value) => {
     let humanReadableValue = value;
@@ -28,8 +29,15 @@ const getHumanReadable = (value) => {
     return `${humanReadableValue.toPrecision(4)}${memoryUnits[index]}`;
 };
 const DiskStatus = ({ diskStatus }) => {
-    const diskElements = diskStatus.map((item, index) => React.createElement("div", { key: index }, `${item.label} - ${getHumanReadable(item.byteUsage)} of ${getHumanReadable(item.byteTotal)}`));
-    return React.createElement("div", null, diskElements);
+    return React.createElement("ol", null, diskStatus.map((item, index) => {
+        const content = `${getHumanReadable(item.byteUsage)} of ${getHumanReadable(item.byteTotal)}`;
+        return React.createElement("li", { key: index },
+            React.createElement("span", null,
+                item.label,
+                " :"),
+            " ",
+            React.createElement(percentage_bar_1.PercentageBar, { used: item.byteUsage, total: item.byteTotal, content: content }));
+    }));
 };
 const Page = ({ diskStatus, uptime, raidStatus }) => {
     return React.createElement("div", null,
@@ -44,7 +52,8 @@ exports.HomePage = (fileSystem) => __awaiter(void 0, void 0, void 0, function* (
     return React.createElement("html", { lang: "en" },
         React.createElement("head", null,
             React.createElement("meta", { httpEquiv: "x-ua-compatible", content: "ie=edge" }),
-            React.createElement("meta", { name: "viewport", content: "width=device-width, initial-scale=1" })),
+            React.createElement("meta", { name: "viewport", content: "width=device-width, initial-scale=1" }),
+            React.createElement("link", { href: "/main.css", rel: "stylesheet" })),
         React.createElement("body", null,
             React.createElement(Page, { diskStatus: diskStatus, uptime: uptime, raidStatus: raidStatus })));
 });

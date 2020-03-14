@@ -9,7 +9,8 @@
     "react-dom": "^16.13.0"
   },
   "scripts": {
-    "build": "rm -rf ./dist && tsc",
+    "build": "./bin/build.sh",
+    "prestart": "yarn build",
     "start": "./bin/start.sh",
     "start-prod": "NODE_PATH=\"$(pwd)/dist:${NODE_PATH:-}\" node dist/main.js"
   },
@@ -20,6 +21,7 @@
     "@types/react-dom": "^16.9.5",
     "@typescript-eslint/eslint-plugin": "^2.22.0",
     "@typescript-eslint/parser": "^2.22.0",
+    "clean-css-cli": "^4.3.0",
     "eslint": "^6.8.0",
     "eslint-plugin-react": "^7.19.0",
     "typescript": "^3.8.3",

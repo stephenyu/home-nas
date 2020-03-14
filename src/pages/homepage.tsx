@@ -1,6 +1,7 @@
 import * as React from "react";
 
-import { DiskStatus, LinuxFileSystem, FileSystem } from 'services/file_system';
+import { DiskStatus, FileSystem } from 'services/file_system';
+import { PercentageBar } from './percentage_bar';
 
 interface PageProps {
     diskStatus: DiskStatus[];
@@ -24,8 +25,12 @@ const getHumanReadable = (value: number): string => {
 
 
 const DiskStatus = ({diskStatus} : {diskStatus: DiskStatus[]}) => {
-  const diskElements = diskStatus.map((item, index) => <div key={index}>{`${item.label} - ${getHumanReadable(item.byteUsage)} of ${getHumanReadable(item.byteTotal)}`}</div>);
-  return <div>{diskElements}</div>
+  return <ol>
+    {diskStatus.map((item, index) => {
+      const content = `${getHumanReadable(item.byteUsage)} of ${getHumanReadable(item.byteTotal)}`;
+      return <li key={index}><span>{item.label} :</span> <PercentageBar used={item.byteUsage} total={item.byteTotal} content={content}/></li>
+    })}
+  </ol>
 }
 
 const Page = ({ diskStatus, uptime, raidStatus }: PageProps) => {
@@ -46,6 +51,7 @@ export const HomePage = async (fileSystem: FileSystem): Promise<JSX.Element> => 
     <head>
       <meta httpEquiv="x-ua-compatible" content="ie=edge" />
       <meta name="viewport" content="width=device-width, initial-scale=1" />
+      <link href="/main.css" rel="stylesheet" />
     </head>
 
     <body>
